@@ -9,10 +9,10 @@ import errno
 from pprint import pprint
 
 def read_certificate(json_cert):
-    return base64.b64decode(json_cert['Certificate'])
+    return base64.b64decode(json_cert)
 
-def read_privatekey(json_cert):
-    return base64.b64decode(json_cert['PrivateKey'])
+# def read_privatekey(json_cert):
+#     return base64.b64decode(json_cert)
 
 def read_cert(storage_dir, filename):
     cert_path = os.path.join(storage_dir, filename)
@@ -25,16 +25,17 @@ def read_certs(acme_json_path):
     with open(acme_json_path) as acme_json_file:
         acme_json = json.load(acme_json_file)
 
-        certs_json = acme_json['DomainsCertificate']['Certs']
+        certs_json = acme_json['Certificates']
         certs = {}
         for cert in certs_json:
-            domain = cert['Domains']['Main']
-            domain_cert = cert['Certificate']
+            domain = cert['Domain']['Main']
+            # domain_cert = cert['Certificate']
+            # domain_key = cert['Key']
             # Only get the first cert (should be the most recent)
             if domain not in certs:
                 certs[domain] = dict()
-                certs[domain]['Certificate'] = read_certificate(domain_cert)
-                certs[domain]['PrivateKey'] = read_privatekey(domain_cert)
+                certs[domain]['Certificate'] = read_certificate(cert['Certificate'])
+                certs[domain]['PrivateKey'] = read_certificate(cert['Key'])
 
     return certs
 
