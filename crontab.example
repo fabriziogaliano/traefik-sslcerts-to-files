@@ -1,0 +1,1 @@
+0 0 1 * * /usr/bin/python3 /docker/traefik/dump_certs.py /docker/traefik/acme.json /docker/traefik/certsDump/
